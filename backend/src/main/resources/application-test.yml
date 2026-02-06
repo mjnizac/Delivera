@@ -1,0 +1,27 @@
+# Perfil de TESTING
+# Se activa con @ActiveProfiles("test")
+
+server:
+  port: 8081
+
+logging:
+  level:
+    com.delivera: DEBUG
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  flyway:
+    enabled: false
+
+app:
+  jwt:
+    secret: delivera-jwt-secret-key-para-tests
+    expiration: 3600

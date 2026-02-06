@@ -1,0 +1,11 @@
+
+    ____       ___
+   / __ \___  / (_)   _____  _________ _
+  / / / / _ \/ / / | / / _ \/ ___/ __ `/
+ / /_/ /  __/ / /| |/ /  __/ /  / /_/ /
+/_____/\___/_/_/ |___/\___/_/   \__,_/
+
+  :: Delivera Backend ::  v${application.version}
+  :: Spring Boot ::       v${spring-boot.version}
+  :: Java ::              v${java.version}
+
