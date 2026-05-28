@@ -2,6 +2,7 @@ package com.delivera.controller;
 
 import com.delivera.dto.admin.GlobalMetrics;
 import com.delivera.dto.admin.OrganizationSummary;
+import com.delivera.security.SecurityUtils;
 import com.delivera.service.AdminService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.when;
 class AdminControllerTest {
 
     @Mock private AdminService adminService;
+    @Mock private SecurityUtils securityUtils;
     @InjectMocks private AdminController controller;
 
     @Test
