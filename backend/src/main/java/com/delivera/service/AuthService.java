@@ -93,6 +93,9 @@ public class AuthService {
             throw new UsernameAlreadyExistsException();
         }
         User user = buildUser(request.email(), request.username(), request.firstName(), request.lastName(), request.phone(), request.password());
+        if (StringUtils.hasText(request.address())) user.setAddress(request.address());
+        user.setLatitude(request.latitude());
+        user.setLongitude(request.longitude());
         userRepository.save(user);
         List<LoyalUser> loyalUsers = loyalUserRepository.findByEmail(user.getEmail());
         loyalUsers.forEach(lu -> {
@@ -172,20 +175,26 @@ public class AuthService {
         }
 
         User user = buildUser(email, request.username(), request.firstName(), request.lastName(), null, request.password());
+        if (order.getRecipientAddress() != null) user.setAddress(order.getRecipientAddress());
         userRepository.save(user);
 
         LoyalUser loyalUser = loyalUserRepository
-                .findByCompaniesIdAndEmail(order.getCompany().getId(), email)
+                .findByCompanyIdAndEmail(order.getCompany().getId(), email)
                 .orElseGet(() -> {
-                    LoyalUser lu = new LoyalUser();
-                    lu.getCompanies().add(order.getCompany());
-                    lu.setEmail(email);
+                    LoyalUser lu = loyalUserRepository.findByEmail(email).stream().findFirst()
+                            .orElseGet(() -> {
+                                LoyalUser fresh = new LoyalUser();
+                                fresh.setEmail(email);
+                                return fresh;
+                            });
+                    lu.linkFor(order.getCompany());
                     return lu;
                 });
         loyalUser.setUser(user);
         loyalUserRepository.save(loyalUser);
 
         order.setLoyalUser(loyalUser);
+        order.setTrackingToken(null);
         orderRepository.save(order);
 
         String jwtToken = jwtService.generateToken(user.getEmail(), LOYAL_USER_ROLE);
