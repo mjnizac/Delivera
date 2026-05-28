@@ -35,7 +35,7 @@ import java.util.*;
  *   clara@cliente.com   — usuario registrado con pedidos propios (/my-orders)
  */
 @Component
-@Profile("dev")
+@Profile({"dev", "prod"})
 public class DemoDataSeeder implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DemoDataSeeder.class);
@@ -43,6 +43,9 @@ public class DemoDataSeeder implements CommandLineRunner {
 
     @Value("${app.demo.seed-password:demo1234}")
     private String seedPassword;
+
+    @Value("${app.demo.reset-on-start:false}")
+    private boolean resetOnStart;
 
     private final UserRepository users;
     private final OrganizationRepository organizations;
@@ -86,7 +89,10 @@ public class DemoDataSeeder implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        if (users.count() > 0) {
+        if (resetOnStart) {
+            log.warn("DemoDataSeeder: app.demo.reset-on-start=true -> vaciando tablas de datos antes de re-sembrar.");
+            wipeData();
+        } else if (users.count() > 0) {
             log.info("DemoDataSeeder: la BD ya tiene usuarios, se omite la carga de demo.");
             return;
         }
@@ -403,10 +409,12 @@ public class DemoDataSeeder implements CommandLineRunner {
         LoyalUser lu = new LoyalUser();
         lu.setEmail(email);
         lu.setUser(user);
-        lu.getCompanies().addAll(cs);
-        if (address != null) lu.setAddress(address);
-        if (lat != null) lu.setLatitude(BigDecimal.valueOf(lat));
-        if (lon != null) lu.setLongitude(BigDecimal.valueOf(lon));
+        for (Company c : cs) {
+            LoyalUserCompany link = lu.linkFor(c);
+            if (address != null) link.setAddress(address);
+            if (lat != null) link.setLatitude(BigDecimal.valueOf(lat));
+            if (lon != null) link.setLongitude(BigDecimal.valueOf(lon));
+        }
         return loyalUsers.save(lu);
     }
 
@@ -440,10 +448,11 @@ public class DemoDataSeeder implements CommandLineRunner {
         o.setRecipientName(loyal.getUser() != null
                 ? (loyal.getUser().getFirstName() + " " + loyal.getUser().getLastName())
                 : loyal.getEmail());
-        // Snapshot de dirección: prioridad loyal → user
-        String addr = loyal.getAddress();
-        BigDecimal lat = loyal.getLatitude();
-        BigDecimal lon = loyal.getLongitude();
+        // Snapshot de dirección: prioridad link de la empresa origen → user
+        LoyalUserCompany link = loyal.findLink(c.getId()).orElse(null);
+        String addr = link != null ? link.getAddress() : null;
+        BigDecimal lat = link != null ? link.getLatitude() : null;
+        BigDecimal lon = link != null ? link.getLongitude() : null;
         if (addr == null && loyal.getUser() != null) {
             addr = loyal.getUser().getAddress();
             lat  = loyal.getUser().getLatitude();
@@ -517,6 +526,20 @@ public class DemoDataSeeder implements CommandLineRunner {
             ev.setNote(null);
             orderEvents.save(ev);
         }
+    }
+
+    /**
+     * Vacía las tablas de datos preservando configuración (activity_types, order_status_config,
+     * order_priority_config, worker_role_config, subscription_plans) y el historial de Flyway.
+     * Reinicia la secuencia de referencias de pedido.
+     */
+    private void wipeData() {
+        em.createNativeQuery("TRUNCATE TABLE " +
+                "order_events, order_messages, api_keys, orders, unit_workers, " +
+                "loyal_user_companies, workers, operational_units, loyal_users, " +
+                "companies, organizations, users " +
+                "RESTART IDENTITY CASCADE").executeUpdate();
+        em.createNativeQuery("ALTER SEQUENCE IF EXISTS order_ref_seq RESTART WITH 1").executeUpdate();
     }
 
     private String randomToken() {

@@ -41,7 +41,7 @@ public class ActivityService {
                 orderRepository.countByCompanyIdAndStatusAndCreatedAtAfter(companyId, OrderStatus.DELIVERED, from),
                 orderRepository.countByCompanyIdAndStatusAndCreatedAtAfter(companyId, OrderStatus.CANCELLED, from),
                 orderRepository.countByCompanyIdAndStatusNotIn(companyId, TERMINAL),
-                loyalUserRepository.countByCompaniesIdAndCreatedAtAfter(companyId, from)
+                loyalUserRepository.countByCompanyIdAndLinkCreatedAfter(companyId, from)
         );
     }
 
