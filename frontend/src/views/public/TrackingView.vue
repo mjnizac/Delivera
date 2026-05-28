@@ -190,7 +190,7 @@ onMounted(() => {
                 <PInputText id="claim-email" v-model="claimEmail" type="email" required fluid />
               </div>
               <div class="claim-field">
-                <label for="claim-username">{{ t('tracking.claim.username') }}</label>
+                <label for="claim-username">{{ t('fields.username') }}</label>
                 <PInputText id="claim-username" v-model="claimUsername" required fluid />
               </div>
               <div class="claim-field">
