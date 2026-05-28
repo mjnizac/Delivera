@@ -44,6 +44,8 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     List<Order> findByLoyalUserIdOrderByCreatedAtDesc(UUID loyalUserId);
 
+    List<Order> findByLoyalUserIdAndCompanyIdOrderByCreatedAtDesc(UUID loyalUserId, UUID companyId);
+
     List<Order> findByRecipientEmailOrderByCreatedAtDesc(String recipientEmail);
 
     long countByLoyalUserId(UUID loyalUserId);

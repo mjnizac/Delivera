@@ -28,6 +28,8 @@ public interface WorkerRepository extends JpaRepository<Worker, UUID> {
 
     List<Worker> findByCompanyIdOrderByCreatedAtAsc(UUID companyId);
 
+    List<Worker> findByCompanyIdAndRoleNotOrderByCreatedAtAsc(UUID companyId, WorkerRole role);
+
     Optional<Worker> findByIdAndCompanyId(UUID id, UUID companyId);
 
     long countByCompanyIdAndRole(UUID companyId, WorkerRole role);

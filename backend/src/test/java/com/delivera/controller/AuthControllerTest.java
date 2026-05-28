@@ -2,6 +2,7 @@ package com.delivera.controller;
 
 import com.delivera.dto.auth.*;
 import com.delivera.dto.common.AvailabilityCheckResponse;
+import java.math.BigDecimal;
 import com.delivera.security.AuthRateLimiter;
 import com.delivera.security.SecurityUtils;
 import com.delivera.service.AuthService;
@@ -46,7 +47,7 @@ class AuthControllerTest {
     void register_checksRateLimitAndDelegates() {
         when(httpRequest.getRemoteAddr()).thenReturn("127.0.0.1");
         // RegisterRequest(email, username, firstName, lastName, phone, password)
-        RegisterRequest req = new RegisterRequest("u@e.com", "user1", "First", null, null, "Pass1a2B");
+        RegisterRequest req = new RegisterRequest("u@e.com", "user1", "First", null, null, "Pass1a2B", "Calle Mayor 1, Madrid", new BigDecimal("40.4168"), new BigDecimal("-3.7038"));
         RegisterResponse expected = new RegisterResponse("tok", "u@e.com", "LOYAL_USER");
         when(authService.register(req)).thenReturn(expected);
 

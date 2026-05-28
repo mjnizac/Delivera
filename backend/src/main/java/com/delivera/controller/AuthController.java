@@ -44,7 +44,7 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(HttpServletRequest httpRequest, @Valid @RequestBody LoginRequest request) {
-        authRateLimiter.check(httpRequest.getRemoteAddr(), "login");
+        authRateLimiter.check(AuthRateLimiter.clientIp(httpRequest), "login");
         LoginResponse response = authService.login(request.identifier(), request.password());
         return ResponseEntity.ok(response);
     }
@@ -57,7 +57,7 @@ public class AuthController {
     })
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(HttpServletRequest httpRequest, @Valid @RequestBody RegisterRequest request) {
-        authRateLimiter.check(httpRequest.getRemoteAddr(), "register");
+        authRateLimiter.check(AuthRateLimiter.clientIp(httpRequest), "register");
         RegisterResponse response = authService.register(request);
         return ResponseEntity.ok(response);
     }
@@ -71,7 +71,7 @@ public class AuthController {
     })
     @PostMapping("/register/company")
     public ResponseEntity<CompanyRegisterResponse> registerCompany(HttpServletRequest httpRequest, @Valid @RequestBody CompanyRegisterRequest request) {
-        authRateLimiter.check(httpRequest.getRemoteAddr(), "register-company");
+        authRateLimiter.check(AuthRateLimiter.clientIp(httpRequest), "register-company");
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerCompany(request));
     }
 

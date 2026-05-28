@@ -39,7 +39,7 @@ const navItems = [
 
 const visibleItems = computed(() =>
   navItems.filter(item => {
-    if (item.noRole) return !auth.role
+    if (item.noRole) return !auth.isWorker
     return !item.roles || item.roles.includes(auth.role)
   })
 )

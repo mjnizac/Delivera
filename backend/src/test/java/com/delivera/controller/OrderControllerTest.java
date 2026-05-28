@@ -5,8 +5,10 @@ import com.delivera.dto.auth.LoginResponse;
 import com.delivera.dto.order.*;
 import com.delivera.model.OrderStatus;
 import com.delivera.model.OrderType;
+import com.delivera.security.AuthRateLimiter;
 import com.delivera.service.AuthService;
 import com.delivera.service.OrderService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +26,8 @@ class OrderControllerTest {
 
     @Mock private OrderService orderService;
     @Mock private AuthService authService;
+    @Mock private AuthRateLimiter authRateLimiter;
+    @Mock private HttpServletRequest httpRequest;
     @InjectMocks private OrderController controller;
 
     private static OrderResponse sampleResponse() {
@@ -102,17 +106,18 @@ class OrderControllerTest {
 
     @Test
     void trackByReference_delegatesAndReturns200() {
+        when(httpRequest.getRemoteAddr()).thenReturn("127.0.0.1");
         PublicOrderResponse pub = new PublicOrderResponse(UUID.randomUUID(), "REF-2", null, null, null,
                 null, null, "DELIVERED", null, null, null, false, null, null, null, null, null);
         when(orderService.getPublicByReference("REF-2")).thenReturn(pub);
-        var resp = controller.trackByReference("REF-2");
+        var resp = controller.trackByReference(httpRequest, "REF-2");
         assertThat(resp.getStatusCode().value()).isEqualTo(200);
     }
 
     @Test
     void claimRegister_delegatesAndReturns201() {
-        // ClaimRegisterRequest(firstName, lastName, email, password)
-        ClaimRegisterRequest req = new ClaimRegisterRequest("First", "Last", "a@b.com", "Pass1a2B");
+        // ClaimRegisterRequest(firstName, lastName, email, username, password)
+        ClaimRegisterRequest req = new ClaimRegisterRequest("First", "Last", "a@b.com", "firstlast", "Pass1a2B");
         // LoginResponse(token, email, companyId, role, companyName, orgHandle, orgName)
         LoginResponse expected = new LoginResponse("jwt-token", "a@b.com", null, "LOYAL_USER", null, null, null);
         when(authService.claimRegister("tok", req)).thenReturn(expected);
