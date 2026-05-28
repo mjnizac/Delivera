@@ -21,6 +21,7 @@ const searchRef = ref('')
 const claimFirstName = ref('')
 const claimLastName = ref('')
 const claimEmail = ref('')
+const claimUsername = ref('')
 const claimPassword = ref('')
 const claimLoading = ref(false)
 const claimError = ref('')
@@ -36,6 +37,7 @@ async function submitClaim() {
         firstName: claimFirstName.value.trim(),
         lastName: claimLastName.value.trim(),
         email: claimEmail.value.trim(),
+        username: claimUsername.value.trim(),
         password: claimPassword.value,
       }),
     })
@@ -186,6 +188,10 @@ onMounted(() => {
               <div class="claim-field">
                 <label for="claim-email">{{ t('tracking.claim.email') }}</label>
                 <PInputText id="claim-email" v-model="claimEmail" type="email" required fluid />
+              </div>
+              <div class="claim-field">
+                <label for="claim-username">{{ t('tracking.claim.username') }}</label>
+                <PInputText id="claim-username" v-model="claimUsername" required fluid />
               </div>
               <div class="claim-field">
                 <label for="claim-password">{{ t('tracking.claim.password') }}</label>

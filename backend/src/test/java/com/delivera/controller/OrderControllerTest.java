@@ -111,8 +111,8 @@ class OrderControllerTest {
 
     @Test
     void claimRegister_delegatesAndReturns201() {
-        // ClaimRegisterRequest(firstName, lastName, email, password)
-        ClaimRegisterRequest req = new ClaimRegisterRequest("First", "Last", "a@b.com", "Pass1a2B");
+        // ClaimRegisterRequest(firstName, lastName, email, username, password)
+        ClaimRegisterRequest req = new ClaimRegisterRequest("First", "Last", "a@b.com", "firstlast", "Pass1a2B");
         // LoginResponse(token, email, companyId, role, companyName, orgHandle, orgName)
         LoginResponse expected = new LoginResponse("jwt-token", "a@b.com", null, "LOYAL_USER", null, null, null);
         when(authService.claimRegister("tok", req)).thenReturn(expected);

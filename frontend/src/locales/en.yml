@@ -285,6 +285,7 @@ tracking:
     firstName: First name
     lastName: Last name
     email: Email address
+    username: Username
     password: Password
     submit: Create account and sign in
     alreadyClaimed: This order already has a registered account.

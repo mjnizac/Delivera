@@ -9,5 +9,6 @@ public record ClaimRegisterRequest(
         @NotBlank String firstName,
         @NotBlank String lastName,
         @Email @NotBlank String email,
+        @NotBlank @Size(min = 3, max = 50) @Pattern(regexp = "^[a-z0-9_-]+$") String username,
         @NotBlank @Size(min = 8) @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$") String password) {
 }

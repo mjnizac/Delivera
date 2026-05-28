@@ -285,6 +285,7 @@ tracking:
     firstName: Nombre
     lastName: Apellidos
     email: Correo electrónico
+    username: Nombre de usuario
     password: Contraseña
     submit: Crear cuenta y acceder
     alreadyClaimed: Este pedido ya tiene una cuenta registrada.

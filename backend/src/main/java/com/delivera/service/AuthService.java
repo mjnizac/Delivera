@@ -171,7 +171,7 @@ public class AuthService {
             throw new EmailAlreadyExistsException();
         }
 
-        User user = buildUser(email, null, request.firstName(), request.lastName(), null, request.password());
+        User user = buildUser(email, request.username(), request.firstName(), request.lastName(), null, request.password());
         userRepository.save(user);
 
         LoyalUser loyalUser = loyalUserRepository

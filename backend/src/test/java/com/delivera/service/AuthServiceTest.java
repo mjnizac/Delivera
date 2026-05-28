@@ -81,7 +81,7 @@ class AuthServiceTest {
         claimOrder.setRecipientEmail("juan@gmail.com");
         claimOrder.setCompany(company);
 
-        claimRequest = new ClaimRegisterRequest("Juan", "García", "juan@gmail.com", "Password1");
+        claimRequest = new ClaimRegisterRequest("Juan", "García", "juan@gmail.com", "juangarcia", "Password1");
     }
 
     // --- login ---
@@ -246,7 +246,7 @@ class AuthServiceTest {
     @Test
     void claimRegister_emailMismatch_throws() {
         when(orderRepository.findByTrackingToken("testtoken")).thenReturn(Optional.of(claimOrder));
-        ClaimRegisterRequest req = new ClaimRegisterRequest("A", "B", "other@gmail.com", "Password1");
+        ClaimRegisterRequest req = new ClaimRegisterRequest("A", "B", "other@gmail.com", "userb", "Password1");
         assertThatThrownBy(() -> authService.claimRegister("testtoken", req))
                 .isInstanceOf(OrderClaimEmailMismatchException.class);
     }
