@@ -379,13 +379,54 @@ admin:
   companies: Companies
   workers: Workers
   orders: Orders
+  users: Users
   createdAt: Created
   empty: No organizations registered.
+  emptyCompanies: No companies registered.
+  emptyOrders: No orders registered.
+  emptyUsers: No users registered.
+  emptyWorkers: No workers registered.
+  tab:
+    home: Home
+    activity: Activity
+    administration: Administration
+    settings: Settings
+  entity:
+    organizations: Organizations
+    companies: Companies
+    orders: Orders
+    users: Users
+    workers: Workers
   metric:
     totalOrganizations: Organizations
     totalCompanies: Companies
     totalOrdersThisMonth: Orders this month
     totalActiveUsers: Active users
+  deleteOrg: Delete organization?
+  deleteCompany: Delete company?
+  deleteOrder: Delete order?
+  deleteUser: Delete user?
+  deleteWorker: Delete worker?
+  deleteOrgHint: This will permanently delete the organization, all its companies, orders, workers, and units.
+  deleteCompanyHint: This will permanently delete the company, all its orders, workers, and units.
+  resetTitle: Reset database
+  resetHint: This action will delete all data stored in the application. This cannot be undone.
+  home:
+    chart: Orders (last 30 days)
+    map: Global units map
+  ranking:
+    title: Company ranking
+    company: Company
+    org: Organization
+    orders: Orders
+    empty: No data for this period
+  resetConfirm: Reset database
+  resetSuccess: Database reset successfully
+  orgId: Organization
+  companyName: Company
+  role: Role
+  email: Email
+  isWorker: Worker
 
 common:
   back: Back

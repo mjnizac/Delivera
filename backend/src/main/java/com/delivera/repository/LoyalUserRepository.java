@@ -39,4 +39,11 @@ public interface LoyalUserRepository extends JpaRepository<LoyalUser, UUID> {
            "WHERE l.company.id = :companyId AND l.createdAt > :createdAtAfter")
     long countByCompanyIdAndLinkCreatedAfter(@Param("companyId") UUID companyId,
                                              @Param("createdAtAfter") Instant createdAtAfter);
+
+    @Query("SELECT lu FROM LoyalUser lu WHERE lu.user.id = :userId")
+    Optional<LoyalUser> findByUserId(@Param("userId") UUID userId);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @org.springframework.data.jpa.repository.Query("DELETE FROM LoyalUser lu")
+    void deleteAllLoyalUsers();
 }

@@ -379,13 +379,54 @@ admin:
   companies: Empresas
   workers: Trabajadores
   orders: Pedidos
+  users: Usuarios
   createdAt: Creada
   empty: No hay organizaciones registradas.
+  emptyCompanies: No hay empresas registradas.
+  emptyOrders: No hay pedidos registrados.
+  emptyUsers: No hay usuarios registrados.
+  emptyWorkers: No hay trabajadores registrados.
+  tab:
+    home: Inicio
+    activity: Actividad
+    administration: Administración
+    settings: Ajustes
+  entity:
+    organizations: Organizaciones
+    companies: Empresas
+    orders: Pedidos
+    users: Usuarios
+    workers: Trabajadores
   metric:
     totalOrganizations: Organizaciones
     totalCompanies: Empresas
     totalOrdersThisMonth: Pedidos este mes
     totalActiveUsers: Usuarios activos
+  deleteOrg: "¿Eliminar organización?"
+  deleteCompany: "¿Eliminar empresa?"
+  deleteOrder: "¿Eliminar pedido?"
+  deleteUser: "¿Eliminar usuario?"
+  deleteWorker: "¿Eliminar trabajador?"
+  deleteOrgHint: Se eliminarán permanentemente la organización, todas sus empresas, pedidos, trabajadores y unidades.
+  deleteCompanyHint: Se eliminarán permanentemente la empresa, todos sus pedidos, trabajadores y unidades.
+  resetTitle: Limpiar base de datos
+  resetHint: Esta acción eliminará todos los datos almacenados en la aplicación. No se puede deshacer.
+  home:
+    chart: Pedidos últimos 30 días
+    map: Mapa global de unidades
+  ranking:
+    title: Ranking de empresas
+    company: Empresa
+    org: Organización
+    orders: Pedidos
+    empty: Sin datos para este período
+  resetConfirm: Limpiar base de datos
+  resetSuccess: Base de datos limpiada correctamente
+  orgId: Organización
+  companyName: Empresa
+  role: Rol
+  email: Email
+  isWorker: Trabajador
 
 common:
   back: Volver
