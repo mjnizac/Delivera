@@ -23,6 +23,10 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
+import java.util.Map;
+
+import static org.springframework.http.HttpStatus.*;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -76,6 +80,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(m.status()).body(new ErrorResponse(m.code()));
     }
 
+    // InvalidPasswordException tiene código dinámico — no encaja en el mapa
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<ErrorResponse> handleInvalidPassword(InvalidPasswordException ex) {
         log.warn("Password validation failed: {}", ex.getCode());
@@ -88,6 +93,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(FORBIDDEN).body(new ErrorResponse(ex.getCode()));
     }
 
+    // DataIntegrityViolationException requiere inspección del cause para distinguir casos
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex) {
         Throwable cause = ex.getCause();
