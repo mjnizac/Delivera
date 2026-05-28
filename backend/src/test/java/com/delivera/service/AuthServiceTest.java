@@ -2,6 +2,7 @@ package com.delivera.service;
 
 import com.delivera.dto.auth.*;
 import com.delivera.exception.*;
+import java.math.BigDecimal;
 import com.delivera.model.*;
 import com.delivera.repository.*;
 import com.delivera.repository.ActivityTypeRepository;
@@ -81,7 +82,7 @@ class AuthServiceTest {
         claimOrder.setRecipientEmail("juan@gmail.com");
         claimOrder.setCompany(company);
 
-        claimRequest = new ClaimRegisterRequest("Juan", "García", "juan@gmail.com", "Password1");
+        claimRequest = new ClaimRegisterRequest("Juan", "García", "juan@gmail.com", "juangarcia", "Password1");
     }
 
     // --- login ---
@@ -117,7 +118,7 @@ class AuthServiceTest {
 
     @Test
     void register_success() {
-        RegisterRequest req = new RegisterRequest("new@test.com", "newuser", "John", null, null, "Password1");
+        RegisterRequest req = new RegisterRequest("new@test.com", "newuser", "John", null, null, "Password1", "Calle Mayor 1, Madrid", new BigDecimal("40.4168"), new BigDecimal("-3.7038"));
         when(userRepository.findByEmail("new@test.com")).thenReturn(Optional.empty());
         when(userRepository.existsByUsername("newuser")).thenReturn(false);
         when(passwordEncoder.encode("Password1")).thenReturn("hashed");
@@ -160,7 +161,7 @@ class AuthServiceTest {
     void claimRegister_success_noExistingLoyalUser() {
         when(orderRepository.findByTrackingToken("testtoken")).thenReturn(Optional.of(claimOrder));
         when(userRepository.findByEmail("juan@gmail.com")).thenReturn(Optional.empty());
-        when(loyalUserRepository.findByCompaniesIdAndEmail(company.getId(), "juan@gmail.com")).thenReturn(Optional.empty());
+        when(loyalUserRepository.findByCompanyIdAndEmail(company.getId(), "juan@gmail.com")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("Password1")).thenReturn("hashed");
         when(userRepository.save(any())).thenAnswer(i -> i.getArgument(0));
         when(loyalUserRepository.save(any())).thenAnswer(i -> i.getArgument(0));
@@ -212,14 +213,14 @@ class AuthServiceTest {
 
     @Test
     void register_emailExists_throws() {
-        RegisterRequest req = new RegisterRequest("dup@test.com", "u", "A", null, null, "Password1");
+        RegisterRequest req = new RegisterRequest("dup@test.com", "u", "A", null, null, "Password1", "Calle Mayor 1, Madrid", new BigDecimal("40.4168"), new BigDecimal("-3.7038"));
         when(userRepository.findByEmail("dup@test.com")).thenReturn(Optional.of(user));
         assertThatThrownBy(() -> authService.register(req)).isInstanceOf(EmailAlreadyExistsException.class);
     }
 
     @Test
     void register_usernameExists_throws() {
-        RegisterRequest req = new RegisterRequest("new@test.com", "taken", "A", null, null, "Password1");
+        RegisterRequest req = new RegisterRequest("new@test.com", "taken", "A", null, null, "Password1", "Calle Mayor 1, Madrid", new BigDecimal("40.4168"), new BigDecimal("-3.7038"));
         when(userRepository.findByEmail("new@test.com")).thenReturn(Optional.empty());
         when(userRepository.existsByUsername("taken")).thenReturn(true);
         assertThatThrownBy(() -> authService.register(req)).isInstanceOf(UsernameAlreadyExistsException.class);
@@ -246,7 +247,7 @@ class AuthServiceTest {
     @Test
     void claimRegister_emailMismatch_throws() {
         when(orderRepository.findByTrackingToken("testtoken")).thenReturn(Optional.of(claimOrder));
-        ClaimRegisterRequest req = new ClaimRegisterRequest("A", "B", "other@gmail.com", "Password1");
+        ClaimRegisterRequest req = new ClaimRegisterRequest("A", "B", "other@gmail.com", "userb", "Password1");
         assertThatThrownBy(() -> authService.claimRegister("testtoken", req))
                 .isInstanceOf(OrderClaimEmailMismatchException.class);
     }

@@ -3,10 +3,12 @@ package com.delivera.controller;
 import com.delivera.dto.auth.ClaimRegisterRequest;
 import com.delivera.dto.auth.LoginResponse;
 import com.delivera.dto.order.*;
+import com.delivera.security.AuthRateLimiter;
 import com.delivera.service.AuthService;
 import com.delivera.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ public class OrderController {
 
     private final OrderService orderService;
     private final AuthService authService;
+    private final AuthRateLimiter authRateLimiter;
 
     @Operation(summary = "Listar pedidos de la empresa")
     @GetMapping
@@ -65,7 +68,9 @@ public class OrderController {
 
     @Operation(summary = "Seguimiento público por referencia")
     @GetMapping("/public/search")
-    public ResponseEntity<PublicOrderResponse> trackByReference(@RequestParam String reference) {
+    public ResponseEntity<PublicOrderResponse> trackByReference(HttpServletRequest httpRequest,
+                                                                @RequestParam String reference) {
+        authRateLimiter.check(AuthRateLimiter.clientIp(httpRequest), "public-search");
         return ResponseEntity.ok(orderService.getPublicByReference(reference));
     }
 

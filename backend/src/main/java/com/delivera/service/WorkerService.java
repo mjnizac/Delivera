@@ -44,7 +44,7 @@ public class WorkerService {
     @Transactional(readOnly = true)
     public List<WorkerResponse> getByCompany() {
         UUID companyId = securityUtils.getCurrentCompanyId();
-        return workerRepository.findByCompanyIdOrderByCreatedAtAsc(companyId).stream()
+        return workerRepository.findByCompanyIdAndRoleNotOrderByCreatedAtAsc(companyId, WorkerRole.GLOBAL_ADMIN).stream()
                 .map(WorkerResponse::from)
                 .toList();
     }
