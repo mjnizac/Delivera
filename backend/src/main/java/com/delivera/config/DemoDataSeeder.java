@@ -129,6 +129,7 @@ public class DemoDataSeeder implements CommandLineRunner {
                 "Gran Vía 25, Madrid", 40.4200, -3.7060);
 
         // --- 2. Organizaciones ---
+        Organization delivera   = createOrg("Delivera",    "delivera");   // org de sistema
         Organization rapidlog   = createOrg("RapidLog",    "rapidlog");
         Organization transnorte = createOrg("TransNorte",  "transnorte");
         Organization distrisur  = createOrg("DistriSur",   "distrisur");
@@ -144,7 +145,8 @@ public class DemoDataSeeder implements CommandLineRunner {
         SubscriptionPlan basic = plans.findById("BASIC").orElseThrow();
         SubscriptionPlan pro   = plans.findById("PRO").orElseThrow();
 
-        // --- 4. Empresas (2 por organización mínimo) ---
+        // --- 4. Empresas ---
+        Company deliveraPlatform = createCompany(delivera,   "Delivera Platform",          distribution, free);
         Company rlCentral = createCompany(rapidlog,   "RapidLog Central",           distribution, pro);
         Company rlRetail  = createCompany(rapidlog,   "RapidLog Retail",            retail,       basic);
         Company tnLog     = createCompany(transnorte, "TransNorte Logística",       transport,    pro);
@@ -153,8 +155,8 @@ public class DemoDataSeeder implements CommandLineRunner {
         Company dsInd     = createCompany(distrisur,  "DistriSur Industrial",       industry,     free);
 
         // --- 5. Trabajadores ---
-        // GLOBAL_ADMIN (admin de plataforma, vinculado a la primera empresa)
-        createWorker(admin, rlCentral, WorkerRole.GLOBAL_ADMIN);
+        // GLOBAL_ADMIN — vinculado a la empresa de sistema, no a ninguna organización de cliente
+        createWorker(admin, deliveraPlatform, WorkerRole.GLOBAL_ADMIN);
 
         // RapidLog Central — admin, analista y operador
         Worker carlosW = createWorker(carlos, rlCentral, WorkerRole.COMPANY_ADMIN);
