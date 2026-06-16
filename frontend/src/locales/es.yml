@@ -261,9 +261,9 @@ orders:
   details: Detalles
   priority:
     label: Prioridad
-    HIGH: ALTA
+    HIGH: Alta
     NORMAL: Normal
-    LOW: BAJA
+    LOW: Baja
   status:
     PENDING: Pendiente
     IN_TRANSIT: En tránsito
